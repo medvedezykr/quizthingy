@@ -85,19 +85,18 @@ DBmng.AddQuestionInternal(questiontoadd,  DBmng.GetIdByNamePreset(quiznames[whic
                     }
 
                     int whichquizname = int.Parse(Console.ReadLine());
-string thingtopass = DBmng.GetIdByNamePreset(quiznames[whichquizname-1]);
-/*int count=-1;
-bool exists = false;
-foreach( string thing in quiznames)
-            {
-                count++;
-                if (thingtopass== DBmng.GetIdByNamePreset(quiznames[count]))
+                    bool exists = false;    
+                     if (whichquizname <= quiznames.Count && whichquizname >= 0)
                 {
                     exists = true;
                 }
-            } */
 
-//if(exists){
+ 
+               
+            
+
+if(exists){
+    string thingtopass = DBmng.GetIdByNamePreset(quiznames[whichquizname-1]);
 List<AnswerMe> choosenquizquestions = DBmng.GetQuestionsForQuiz(thingtopass); //somethings
   int asked = 0;
      int correct=0;
@@ -112,7 +111,7 @@ askercount1++;
        
                     }
                     string answer = Console.ReadLine().ToLower();
-                     if (answer == deargod.correct.ToLower())
+                     if (answer == deargod.correct.ToLower() || choosenquizquestions[])//figure out how to make it accept names AND numbers
                     {
                         Console.WriteLine("<------------>");
                         correct++;
@@ -126,9 +125,10 @@ askercount1++;
                     }
                     Console.WriteLine($"answered: {correct} out of {asked} right");
         
-//}
-//else Console.WriteLine("this thingy does not exist!!");
+}
+else Console.WriteLine("this thingy does not exist!!");
         }
+
         
 public static void RemovePresetExternal()
         {
@@ -142,9 +142,12 @@ int count = 0;
                 Console.WriteLine($"{count}. {qname}");
             }
             int ChoosenOne= int.Parse(Console.ReadLine());
+            if (ChoosenOne <= names.Count && ChoosenOne > 0)
+            {
             string topass = names[ChoosenOne-1];
             DBmng.DeleteAPresetInternal(topass);
-
+            }
+            else Console.WriteLine("this thingy does not exist!");
         }
 public static void AddPresetExternal()
         {
