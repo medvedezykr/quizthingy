@@ -1,5 +1,6 @@
 
 using System.ComponentModel;
+using System.Net.Quic;
 using System.Runtime.CompilerServices;
 
 namespace Mainquizthing{
@@ -74,10 +75,18 @@ DBmng.AddQuestionInternal(questiontoadd,  DBmng.GetIdByNamePreset(quiznames[whic
 
  public static void quiz()
         {
-              Console.WriteLine("quizes, quizes, select.");
+           
+             
      int askercount =0;
    
      List<string> quiznames = DBmng.GetAllQuizNames();
+            if (quiznames.Count == 0 || quiznames == null)
+            {
+                Console.WriteLine("Theres no quizes to run");
+                return;
+            }
+
+      Console.WriteLine("quizes, quizes, select.");
      foreach(string deargod in quiznames)
                     {
                         askercount++;
@@ -86,7 +95,7 @@ DBmng.AddQuestionInternal(questiontoadd,  DBmng.GetIdByNamePreset(quiznames[whic
 
                     int whichquizname = int.Parse(Console.ReadLine());
                     bool exists = false;    
-                     if (whichquizname <= quiznames.Count && whichquizname >= 0)
+                     if (whichquizname <= quiznames.Count && whichquizname > 0)
                 {
                     exists = true;
                 }
@@ -103,19 +112,32 @@ List<AnswerMe> choosenquizquestions = DBmng.GetQuestionsForQuiz(thingtopass); //
 foreach(AnswerMe deargod in choosenquizquestions)
                     {
                        int askercount1 =-1;
-                       Console.WriteLine($"Answer me, Jia Baoyu,{deargod.name}"); 
+                       Console.WriteLine($"Answer me, Jia Baoyu, {deargod.name}"); 
                        foreach(string uwaaah in deargod.options){
 askercount1++;
         Console.WriteLine($"{askercount1+1}. {deargod.options[askercount1]}"); //
         
        
                     }
+                     
                     string answer = Console.ReadLine().ToLower();
-                     if (answer == deargod.correct.ToLower() || choosenquizquestions[])//figure out how to make it accept names AND numbers
+                    string cleanAnswer = answer?.Trim() ?? "";
+                   bool isNumber = int.TryParse(answer, out int intanswer);
+            
+
+                     if ( isNumber && deargod.options[intanswer-1] == deargod.correct )//figure out how to make it accept names AND numbers
                     {
+                        
                         Console.WriteLine("<------------>");
                         correct++;
                         asked++;
+                    }
+                    else if(!string.IsNullOrWhiteSpace(cleanAnswer) && cleanAnswer.ToLower() == deargod.correct.ToLower()  )
+                    {
+                         Console.WriteLine("<------------>");
+                        correct++;
+                        asked++;
+                        
                     }
                     else
                     {
@@ -141,11 +163,16 @@ int count = 0;
                 count++;
                 Console.WriteLine($"{count}. {qname}");
             }
-            int ChoosenOne= int.Parse(Console.ReadLine());
-            if (ChoosenOne <= names.Count && ChoosenOne > 0)
+            string ChoosenOne= Console.ReadLine();
+           
+            if (int.TryParse(ChoosenOne, out int ChoosenOneint) && ChoosenOneint <= names.Count && ChoosenOneint > 0)
             {
-            string topass = names[ChoosenOne-1];
+            string topass = names[ChoosenOneint-1];
             DBmng.DeleteAPresetInternal(topass);
+            }
+            else if(!string.IsNullOrWhiteSpace(ChoosenOne) && names.Contains(ChoosenOne))
+            {
+                DBmng.DeleteAPresetInternal(ChoosenOne);
             }
             else Console.WriteLine("this thingy does not exist!");
         }
@@ -161,7 +188,7 @@ if(answer == "y")
                 while (true)
                 {
                     AddQuestion();
-                     Console.WriteLine("another one?");
+                     Console.WriteLine("another one?(y/n, default:n)");
                      var answer1 = Console.ReadLine();
 if(answer == "y") continue;
 else return;
@@ -175,13 +202,39 @@ else return;
         }
        public static void RemoveQuestion()
         {List<AnswerMe> questions = DBmng.GetAllQuestions();
+        if (questions == null || questions.Count ==0 )
+        {Console.WriteLine("there is no questions");return;}
+
              Console.WriteLine("which one to delete?:");
+             int count = 0;
 foreach(AnswerMe question in questions)
             {
-                Console.WriteLine($"id: {question.id}. {question.name}   (from:{ DBmng.GetPresetNameOfAQuestion(question.id)})  ");
+                count++;
+                Console.WriteLine($"{count}. id: {question.id}. {question.name}   (from:{ DBmng.GetPresetNameOfAQuestion(question.id)})  ");
             }
-            int choosenone = int.Parse(Console.ReadLine());
-DBmng.RemoveQuestionInternal(choosenone);
+            string choosenone = Console.ReadLine();
+            if (int.TryParse(choosenone, out int inttowork))
+            {
+                if(inttowork > 0 && inttowork<= count)
+                {
+                    DBmng.RemoveQuestionInternal(questions[inttowork-1].name);
+                }
+                else
+                {
+                    Console.WriteLine("this tihngy doesnt exist!");
+                }
+            
+            
+                
+            }
+else Console.WriteLine("enter an id");
+                
+
+
+
+
+
+
 
         }
 

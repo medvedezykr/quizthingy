@@ -19,8 +19,10 @@ namespace Mainquizthing
     public static class DBmng
     {
         
-        private static string quizconnection = @"Data Source=..\..\..\quiz.db";
+       static string executableFolder = AppDomain.CurrentDomain.BaseDirectory;
+static string databasePath = Path.Combine(executableFolder, "quiz.db");
 
+static string quizconnection = $"Data Source={databasePath};";
         
         public static void InitializeDatabase()
         {
@@ -192,13 +194,13 @@ using (var command = new SqliteCommand(sql, connection))
         }
 
     }
-     public static void RemoveQuestionInternal(int idofaquestiontodelete)
+     public static void RemoveQuestionInternal(string idofaquestiontodelete)
         {
              using (var connection = new SqliteConnection(quizconnection))
             {
                 connection.Open();
 string sql = $@"
-DELETE FROM Questions WHERE id = @idofaquestiontodelete
+DELETE FROM Questions WHERE QuestionText = @idofaquestiontodelete
 "; using (var command = new SqliteCommand(sql, connection))
             {
                 command.Parameters.AddWithValue("@idofaquestiontodelete", idofaquestiontodelete);
@@ -298,7 +300,7 @@ WHERE Quizname = @name;
         }
         
     }
-    return thing.ToString();
+    return Convert.ToString(thing);
     }
 }
 }

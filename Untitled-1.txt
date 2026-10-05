@@ -1,3 +1,1 @@
-to do:
-every addition and deletion things should ask user if he wants to do that again, if not - throw them back, 
-and of course, implement every external function that is there, i didnt do it for them to just sit there.
+mmm faggots (as in a british dish, meatballs)
