@@ -157,6 +157,10 @@ public static void RemovePresetExternal()
             Console.WriteLine("what to delete?(num)");
 
 List<string> names =  DBmng.GetAllQuizNames();
+            if(names == null || names.Count == 0){
+                 Console.WriteLine("theres nothing to delete");
+                 return;
+            }
 int count = 0;
             foreach (string qname in names)
             {

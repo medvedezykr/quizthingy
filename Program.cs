@@ -41,9 +41,11 @@ safenet2= false;
                     break;
                     case "3":
 externalmethods.RemovePresetExternal();
+safenet2= false;
                     break;
                        case "4":
 externalmethods.AddPresetExternal();
+safenet2= false;
                     break;
 default:
 Console.WriteLine("enter a correct number");
